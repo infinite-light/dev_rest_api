@@ -19,7 +19,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from devrestapp import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+   path('admin/', admin.site.urls),
    # path('', views.employeelist.as_view()),
    path('employees/<int:id>', views.employee_detail),
    path('employees/', views.employeelist),
