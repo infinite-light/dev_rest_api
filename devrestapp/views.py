@@ -76,6 +76,13 @@ def indexpage(request):
     else:
         context={}
         return render(request,'devrestapp/index.html', context)
+
+def eindexpage(request):     
+        context={}
+        return render(request,'devrestapp/eindex.html', context)
+
+
+
 '''
 @api_view(['GET','POST'])
 def gicmap(request):

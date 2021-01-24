@@ -25,6 +25,6 @@ urlpatterns = [
    path('employees/', views.employeelist),
    path('address/', views.address, name="address"),
    #path('map/', views.gicmap, name="gicmap"),
-   path('', views.indexpage, name='index'),
-   
+   #path('', views.indexpage, name='index'),
+   path('', views.eindexpage, name='eindex'),
 ]
