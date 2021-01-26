@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from devrestapp import views
+from graphene_django.views import GraphQLView
+from devrestapp.schema import schema 
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
    path('admin/', admin.site.urls),
@@ -27,4 +30,5 @@ urlpatterns = [
    #path('map/', views.gicmap, name="gicmap"),
    #path('', views.indexpage, name='index'),
    path('', views.eindexpage, name='eindex'),
+   path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
 ]

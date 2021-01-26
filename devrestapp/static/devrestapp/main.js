@@ -22,6 +22,7 @@ $(document).ready(function () {
     $('#cchange').hide();
     $('#sadd').hide();
     $('#delete').hide();
+    $('#gpqldtl').hide();
     $("div").click(function () {
         $.ajax({
             url: "/employees/",
@@ -34,6 +35,8 @@ $(document).ready(function () {
                 $('#emodify').show();
                 $('#eadd').show();
                 $('#delete').show();
+                $('#gpql').hide();
+                $('#cchange').show()
             }
         });
     });
@@ -54,10 +57,11 @@ $(document).ready(function () {
                 $('#delete').hide();
                 $('#eadd').hide();
                 $('#cchange').show();
+                $('#e_id').hide();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("You have not selected employee");
-                
+
             }
         });
     });
@@ -98,7 +102,7 @@ $(document).ready(function () {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("You have not selected employee");
-                
+
             }
         });
     });
@@ -136,7 +140,7 @@ $(document).ready(function () {
                 $("p").html(
                     "<label for='firstname'>First name:</label><input type='text' id='firstname' name='firstname'><br> " +
                     "<label for='lastname'>Last name:</label><input type='text' id='lastname' name='lastname'><br>" +
-                    "<label for='contact'>Contact No:</label> <input type='text' id='contact' name='contact'> <br>" +
+                    "<label for='contact'>Contact No:</label><input type='text' id='contact' name='contact'> <br>" +
                     "<label for='deptno'>Dept No:</label> <input type='text' id='deptno' name='deptno'> <br>" +
                     "<label for='ofno'>Office city:</label> <input type='text' id='ofno' name='ofno'><br>"
                 );
@@ -186,9 +190,86 @@ $(document).ready(function () {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("You have not selected employee");
-                
+
             }
         });
     });
+    $("#gpql").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/graphql/",
+            contentType: "application/json",
+            crossDomain: true,
+            data: JSON.stringify({
+                query:
+                    `{
+                      employeeList{
+                        id
+                        firstname
+                      }
+                    }`
+            }),
+            //   .then(res => res.JSON())
+            //  .then(data => {
+            //       data.data.employeeList.forEach(emp => {
+            //           const option = document.createElement('option')
+            //           option.value = employeeList.id
+            //           option.innerText = employeeList.firstname
+            //           e_id.append(option)
+            //      })
+            //  }),  
+            success: function (result) {
+               /*
+                names = "<label for='e_id'>Select Employee Name:</label><select name='e_id' id='e_id'>"
+                var result = JSON.stringify(result);
+                (data => {
+                    data.data.employeeList.forEach(emp => {
+                        names += "<option value=" + employeeList.id + ">" + employeeList.firstname + "</option>"
+                    });
+                })
+                $("p").html(names + "</select>");
+                */
+                //console.log(result)
+                //names = "<label for='e_id'>Select Employee Name:</label><select name='e_id' id='e_id'>"
+                //result.forEach(elem => names += "<option value=" + result['data']['employeeList']['id'] + ">"+ result['data']['employeeList']['firstname'] +"</option>" )
+                //result.forEach(elem => names += "<option value=" + elem["id"] + ">"+ elem["firstname"] +"</option>" ) 
+                //$("p").html( names + "</select>");
+                $("p").html("<label for=''e_id''>'emp id'</label><input type='text' id='e_id' name='e_id'></input>")
+                //  alert("Swami")
+                $('#gpqldtl').show();
+                $('#cchange').show()
+                $('#gpql').hide();
+            }
+        });
+    });
+    $("#gpqldtl").click(function () {
+        var eid = $('#e_id').val()
+        $.ajax({
+            type: "POST",
+            url: "/graphql/",
+            contentType: "application/json",
+            crossDomain: true,
+            data: JSON.stringify({
+                query:
+                    `{
+                    allEmployees(id: ${eid} ) {
+                        firstname
+                        lastname
+                        deptno { deptname }
+                        officeCity { officeCity }
+                    }
+                }`
+            }),
+            success: function (result) {
+                var content = result['data']
+                //   var firstName = result['data']['allEmployees']['firstname']
+                //   alert(firstName)
+                $("p").html("<textarea id='info' name='info' rows='5' cols='50'></textarea>");
+                $("#info").text(JSON.stringify(content));
+                $('#cchange').show();
+                $('#gpqldtl').hide();
+            }
 
+        });
+    });
 })

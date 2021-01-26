@@ -1,0 +1,23 @@
+# paste this query and we can see the result
+query
+{
+  allEmployees(id: 2) {
+    firstname
+    lastname
+    deptno {
+      deptname
+    }
+    officeCity {
+       officeCity
+    }
+  }
+  
+}
+
+==
+query
+{
+  employeeList{
+    firstname
+  }
+}
