@@ -57,7 +57,6 @@ $(document).ready(function () {
                 $('#delete').hide();
                 $('#eadd').hide();
                 $('#cchange').show();
-                $('#e_id').hide();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("You have not selected employee");
@@ -200,14 +199,14 @@ $(document).ready(function () {
             url: "/graphql/",
             contentType: "application/json",
             crossDomain: true,
+            headers: { 'x-version-number': '1.2' },
             data: JSON.stringify({
-                query:
-                    `{
-                      employeeList{
-                        id
-                        firstname
-                      }
-                    }`
+                query : `{
+                    allEmployee{
+                      id
+                      firstname
+                    }
+                  }`
             }),
             //   .then(res => res.JSON())
             //  .then(data => {
@@ -219,26 +218,14 @@ $(document).ready(function () {
             //      })
             //  }),  
             success: function (result) {
-               /*
                 names = "<label for='e_id'>Select Employee Name:</label><select name='e_id' id='e_id'>"
-                var result = JSON.stringify(result);
-                (data => {
-                    data.data.employeeList.forEach(emp => {
-                        names += "<option value=" + employeeList.id + ">" + employeeList.firstname + "</option>"
-                    });
-                })
-                $("p").html(names + "</select>");
-                */
-                //console.log(result)
-                //names = "<label for='e_id'>Select Employee Name:</label><select name='e_id' id='e_id'>"
-                //result.forEach(elem => names += "<option value=" + result['data']['employeeList']['id'] + ">"+ result['data']['employeeList']['firstname'] +"</option>" )
-                //result.forEach(elem => names += "<option value=" + elem["id"] + ">"+ elem["firstname"] +"</option>" ) 
-                //$("p").html( names + "</select>");
-                $("p").html("<label for=''e_id''>'emp id'</label><input type='text' id='e_id' name='e_id'></input>")
-                //  alert("Swami")
+                result['data']['allEmployee'].forEach(elem => names += "<option value=" + elem['id'] + ">"+ elem['firstname'] +"</option>" )
+                //console.log(names)
+                $("p").html( names + "</select>");
                 $('#gpqldtl').show();
                 $('#cchange').show()
                 $('#gpql').hide();
+                $('#e_id').show();
             }
         });
     });
@@ -248,13 +235,15 @@ $(document).ready(function () {
             type: "POST",
             url: "/graphql/",
             contentType: "application/json",
+            headers: { 'x-version-number': '1.3' },
             crossDomain: true,
             data: JSON.stringify({
                 query:
                     `{
-                    allEmployees(id: ${eid} ) {
+                        employee(id: ${eid}) {
                         firstname
                         lastname
+                        contactno
                         deptno { deptname }
                         officeCity { officeCity }
                     }
@@ -262,10 +251,17 @@ $(document).ready(function () {
             }),
             success: function (result) {
                 var content = result['data']
-                //   var firstName = result['data']['allEmployees']['firstname']
-                //   alert(firstName)
+                var firstName = result['data']['employee']['firstname']
+                var lastname = result['data']['employee']['lastname']
+                var contactno = result['data']['employee']['contactno']
+                var deptname = result['data']['employee']['deptno']['deptname']
+                var officeCity = result['data']['employee']['officeCity']['officeCity']
+                var Details = "Name: " + firstName + " " + lastname  +"\nContct no: "+ contactno + "\nDepartment: " + deptname  + "\nOffice: "+ officeCity
+
+                
                 $("p").html("<textarea id='info' name='info' rows='5' cols='50'></textarea>");
-                $("#info").text(JSON.stringify(content));
+               // $("#info").text(JSON.stringify(content));
+               $("#info").text(Details);
                 $('#cchange').show();
                 $('#gpqldtl').hide();
             }

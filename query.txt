@@ -21,3 +21,59 @@ query
     firstname
   }
 }
+print(info.context.META['HTTP_X_VERSION_NUMBER'])
+
+mutation {
+  CreateDepartment(deptname: "Retail") {
+    department {
+      id,
+      deptname
+    }
+  }
+}
+---
+mutation{
+  CreateEmployee(firstname:"Rahul",
+  lastname:"Gandhi",
+    contactno:"12313")
+    {
+    employee{id,
+      firstname,
+      lastname,
+      contactno,
+      deptno{
+        id
+      }
+      officeCity{
+        id
+      }
+			}
+  }
+}
+
+---
+mutation {
+  UpdateEmployee(id: 18, firstname: "Dev", lastname: "d", contactno: "1") {
+    employee {
+      firstname,
+      lastname,
+      contactno,
+      deptno {
+        id
+      },
+      officeCity {
+        id
+      }
+    }
+  }
+}
+---
+mutation{
+  DeleteEmployee(id:17)
+  {
+    employee{
+      id,
+      
+    }
+  }
+}

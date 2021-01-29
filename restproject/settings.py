@@ -124,5 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 GRAPHENE = {
-    "SCHEMA": "devrestapp.schema.schema"
+    "SCHEMA": "devrestapp.schema.schema",
+    "MIDDLEWARE": {
+        'devrestapp.middleware.DRFVersionMiddleware'
+    }
 }

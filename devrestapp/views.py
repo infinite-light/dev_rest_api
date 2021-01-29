@@ -4,7 +4,7 @@ from django.shortcuts import get_list_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import employees
+from .models import Employee
 from .serializers import employeeSerializer
 from rest_framework.decorators import api_view
 import requests  # for arcgis API 
@@ -81,6 +81,9 @@ def eindexpage(request):
         context={}
         return render(request,'devrestapp/eindex.html', context)
 
+def gindexpage(request):     
+        context={}
+        return render(request,'devrestapp/gindex.html', context)
 
 
 '''

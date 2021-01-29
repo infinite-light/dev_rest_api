@@ -13,12 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+import sys
+from os.path import dirname
+sys.path.append('../devrestapp/')
+
 from django.contrib import admin
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from devrestapp import views
 from graphene_django.views import GraphQLView
-from devrestapp.schema import schema 
+from .schema import schema 
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
@@ -30,5 +35,6 @@ urlpatterns = [
    #path('map/', views.gicmap, name="gicmap"),
    #path('', views.indexpage, name='index'),
    path('', views.eindexpage, name='eindex'),
+   path('g/', views.gindexpage, name='gindex'),
    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
 ]
