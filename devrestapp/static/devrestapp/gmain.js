@@ -65,6 +65,7 @@ $(document).ready(function () {
                             contactno
                             deptno { deptname }
                             officeCity { officeCity }
+                            empemail
                         }
                     }`
             }),
@@ -75,7 +76,9 @@ $(document).ready(function () {
                 var contactno = result['data']['employee']['contactno']
                 var deptname = result['data']['employee']['deptno']['deptname']
                 var officeCity = result['data']['employee']['officeCity']['officeCity']
-                var Details = "Name: " + firstName + " " + lastname + "\nContct no: " + contactno + "\nDepartment: " + deptname + "\nOffice: " + officeCity
+                var empemail = result['data']['employee']['empemail']
+                
+                var Details = "Name: " + firstName + " " + lastname + "\nContct no: " + contactno + " email : "+ empemail + "\nDepartment: " + deptname + "\nOffice: " + officeCity
 
 
                 $("p").html("<textarea id='info' name='info' rows='5' cols='50'></textarea>");
@@ -115,8 +118,9 @@ $(document).ready(function () {
                             firstname
                             lastname
                             contactno
-                            deptno { deptname }
-                            officeCity { officeCity }
+                            deptno { id }
+                            officeCity { id }
+                            empemail
                         }
                     }`
             }),
@@ -125,15 +129,18 @@ $(document).ready(function () {
                 var firstName = result['data']['employee']['firstname']
                 var lastname = result['data']['employee']['lastname']
                 var contactno = result['data']['employee']['contactno']
-                var deptname = result['data']['employee']['deptno']['deptname']
-                var officeCity = result['data']['employee']['officeCity']['officeCity']
+                var deptname = result['data']['employee']['deptno']["id"]
+                var officeCity = result['data']['employee']['officeCity']["id"]
+                var empemail= result['data']['employee']['empemail']
+                
                 $("p").html(
                     "<input type='text' id='eno' name='eno'>" +
                     "<label for='firstname'>First name:</label><input type='text' id='firstname' name='firstname'><br> " +
                     "<label for='lastname'>Last name:</label><input type='text' id='lastname' name='lastname'><br>" +
                     "<label for='contact'>Contact No:</label> <input type='text' id='contact' name='contact'> <br>" +
                     "<label for='deptno'>Department:</label> <input type='text' id='deptno' name='deptno'> <br>" +
-                    "<label for='ofno'>Office city:</label> <input type='text' id='ofno' name='ofno'><br>"
+                    "<label for='ofno'>Office city:</label> <input type='text' id='ofno' name='ofno'><br>"+
+                    "<label for='empemail'>Email:</label> <input type='text' id='empemail' name='empemail'><br>"
                 );
                 $("#eno").val(eid);
                 $("#eno").show();
@@ -142,6 +149,7 @@ $(document).ready(function () {
                 $('#contact').val(contactno);
                 $("#deptno").val(deptname);
                 $("#ofno").val(officeCity);
+                $("#empemail").val(empemail);
                 $('#edetailbtn').hide();
                 $('#emodify').hide();
                 $('#eadd').hide();
@@ -166,6 +174,7 @@ $(document).ready(function () {
         var contactno = $('#contact').val();
         var deptno = $("#deptno").val();
         var office_city = $("#ofno").val();
+        var empemail = $("#empemail").val();
         
         $.ajax({
             type: "POST",
@@ -173,8 +182,8 @@ $(document).ready(function () {
             contentType: "application/graphql",
             headers: { 'x-version-number': '1.3' },
             crossDomain: true,
-            data: `mutation{UpdateEmployee(id:\"${e_id}\",firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
-
+           // data: `mutation{UpdateEmployee(id:\"${e_id}\",firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
+            data:`mutation{UpdateEmployee(id:\"${e_id}\", firstname:\"${firstname}\", lastname:\"${lastname}\", contactno:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, empemail:\"${empemail}\") {employee{id}}}`,
             success: function (result) {
              //   console.log(result)
                 alert("Record is Updateded.");
@@ -193,7 +202,8 @@ $(document).ready(function () {
             "<label for='lastname'>Last name:</label><input type='text' id='lastname' name='lastname'><br>" +
             "<label for='contact'>Contact No:</label><input type='text' id='contact' name='contact'> <br>" +
             "<label for='deptno'>Dept No:</label> <input type='text' id='deptno' name='deptno'> <br>" +
-            "<label for='ofno'>Office city:</label> <input type='text' id='ofno' name='ofno'><br>"
+            "<label for='ofno'>Office city:</label> <input type='text' id='ofno' name='ofno'><br>" +
+            "<label for='empemail'>Email:</label> <input type='text' id='empemail' name='empemail'><br>"
         );
         $('#edetailbtn').hide();
         $('#emodify').hide();
@@ -213,14 +223,15 @@ $(document).ready(function () {
         var contactno = $('#contact').val();
         var deptno = $("#deptno").val();
         var office_city = $("#ofno").val();
+        var empemail=$("#empemail").val();
         $.ajax({
             type: "POST",
             url: "/graphql/",
             contentType: "application/graphql",
             headers: { 'x-version-number': '1.3' },
             crossDomain: true,
-            
-            data: `mutation{CreateEmployee(firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
+            data:`mutation{CreateEmployee(firstname:\"${firstname}\", lastname:\"${lastname}\", contactno:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, empemail:\"${empemail}\") {employee{id}}}`,
+           // data: `mutation{CreateEmployee(firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
             success: function (result) {
                 alert("Record is added.");
                 location.reload();

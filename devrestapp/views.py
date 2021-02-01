@@ -20,7 +20,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 '''
 class employeelist(APIView):
     def get(self, request):
-        allemployee=employees.objects.all()
+        allemployee=Employee.objects.all()
         serializer = employeeSerializer(allemployee, many=True)
         return Response(serializer.data)
     def post(self):
@@ -32,8 +32,8 @@ def employeelist(request):
     List all code of employee or create a new employee
     '''
     if request.method == 'GET':
-        allemployees = employees.objects.all()
-        serializer=employeeSerializer(allemployees, many=True)
+        allemployee = Employee.objects.all()
+        serializer=employeeSerializer(allemployee, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = employeeSerializer(data=request.data)
@@ -48,8 +48,8 @@ def employee_detail(request, id):
     Retrive, update or delete a employee.
     '''
     try:
-        employee = employees.objects.get(id=id)
-    except employees.DoesNotExist:
+        employee = Employee.objects.get(id=id)
+    except Employee.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method =='GET':

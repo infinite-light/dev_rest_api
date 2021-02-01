@@ -20,12 +20,12 @@ class officeType(DjangoObjectType):
 class employeeType(DjangoObjectType):
     class Meta:
         model = Employee
-        fields = ("id","firstname","lastname","contactno","deptno","office_city")
+        fields = ("id","firstname","lastname","contactno","deptno","office_city", "empemail")
 
 class employee2Type(DjangoObjectType):
     class Meta:
         model = Employee
-        fields = ("id","firstname","lastname","deptno","office_city")
+      #  fields = ("id","firstname","lastname","contactno", "deptno","office_city","empemail")
 
 class Query(graphene.ObjectType):
     all_employee = graphene.List(employeeType)
@@ -157,20 +157,22 @@ class CreateEmployee(graphene.Mutation):
     firstname=graphene.String()
     lastname=graphene.String()
     contactno=graphene.String()
-    #deptno=graphene.List(graphene.ID)
-    #office_city = graphene.List(graphene.ID)
-
+    deptno_id=graphene.Int()
+    office_city_id = graphene.Int()
+    empemail=graphene.String()
+    
   employee = graphene.Field(employeeType)
 
-  def mutate(self, info, firstname, lastname, contactno):
+  def mutate(self, info, firstname, lastname, contactno, deptno_id, office_city_id, empemail):
     employee = Employee.objects.create(
         firstname=firstname,
         lastname=lastname,
         contactno=contactno,
-       # deptno=deptno,
-       # office_city=office_city
-
+        deptno_id=deptno_id,
+        office_city_id=office_city_id,
+        empemail=empemail
     )
+    employee.save()
     # We've done this so many times, it no longer feels weird 😃 
     return CreateEmployee( employee=employee )
 
@@ -182,19 +184,21 @@ class UpdateEmployee(graphene.Mutation):
     firstname=graphene.String()
     lastname=graphene.String()
     contactno=graphene.String()
-    #deptno=graphene.List(graphene.ID)
-    #office_city = graphene.List(graphene.ID)
+    deptno_id=graphene.Int()
+    office_city_id = graphene.Int()
+    empemail=graphene.String()
 
   # The class attributes define the response of the mutation
   employee = graphene.Field(employeeType)
 
-  def mutate(self, info, id, firstname, lastname, contactno):
+  def mutate(self, info, id, firstname, lastname, contactno, deptno_id, office_city_id, empemail):
     employee = Employee.objects.get(pk=id)
     employee.firstname = firstname if firstname is not None else employee.firstname
     employee.lastname = lastname if lastname is not None else employee.lastname
     employee.contactno = contactno if contactno is not None else employee.contactno
-    #employee.deptno = deptno if deptno is not None else employee.deptno
-    #employee.office_city = office_city if office_city is not None else employee.office_city
+    employee.deptno_id = deptno_id if deptno_id is not None else employee.deptno_id
+    employee.office_city_id = office_city_id if office_city_id is not None else employee.office_city_id
+    employee.empemail=empemail if empemail is not None else employee.empemail
     employee.save()
     # Notice we return an instance of this mutation 🤷‍♀️
     return UpdateEmployee(employee=employee)

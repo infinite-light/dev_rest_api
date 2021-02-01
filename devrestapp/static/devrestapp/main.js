@@ -1,3 +1,19 @@
+/*
+Notes from Janki Thakkar
+def get_serializer_class(self):
+    if self.request.version == 'v1':
+        return AccountSerializerVersion1
+    return AccountSerializer
+
+    @GetMapping("/quizzesByCustomHeader")
+public List<Quiz> getAllQuizzes(@RequestHeader("x-api-version") String version) {
+  // logic here to check the passed in version string and based on
+  // that process the request differently
+  ...
+}
+
+x-api-version=v1
+*/
 $(document).ready(function () {
     /*
         $("#edetailbtn").click(function () {
@@ -36,7 +52,8 @@ $(document).ready(function () {
                 $('#eadd').show();
                 $('#delete').show();
                 $('#gpql').hide();
-                $('#cchange').show()
+                $('#cchange').show();
+                $("form").hide();
             }
         });
     });
@@ -57,6 +74,8 @@ $(document).ready(function () {
                 $('#delete').hide();
                 $('#eadd').hide();
                 $('#cchange').show();
+                $("#gpqldtl").hide();
+                $("form").hide()
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("You have not selected employee");
@@ -193,6 +212,7 @@ $(document).ready(function () {
             }
         });
     });
+
     $("#gpql").click(function () {
         $.ajax({
             type: "POST",
@@ -268,4 +288,5 @@ $(document).ready(function () {
 
         });
     });
+    
 })
