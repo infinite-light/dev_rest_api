@@ -102,6 +102,7 @@ $(document).ready(function () {
         });
     });
 
+    
 
     $("#emodify").click(function () {
         var eid = $("input[name='eid']:checked").val()
@@ -176,6 +177,7 @@ $(document).ready(function () {
         var office_city = $("#ofno").val();
         var empemail = $("#empemail").val();
         
+        if (validphonenumber(contactno) && validemail(empemail)){    
         $.ajax({
             type: "POST",
             url: "/graphql/",
@@ -190,6 +192,7 @@ $(document).ready(function () {
                 location.reload();
             }
         });
+    }
     });
 
     $("#cchange").click(function () {
@@ -214,6 +217,30 @@ $(document).ready(function () {
         $('#sadd').show();
     });
 
+    function validemail(emailaddress) 
+        {
+        var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+        if (testEmail.test(emailaddress)) 
+            return true;
+        else 
+            alert("not a vilid email address.")
+            return false;
+        };
+
+    function validphonenumber(number)
+        {
+          var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+          if(number.match(phoneno))
+                {
+              return true;
+                }
+              else
+                {
+                alert("not a valid  phone number");
+                return false;
+                }
+        }
+
 
     $("#sadd").click(function () {
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -224,6 +251,11 @@ $(document).ready(function () {
         var deptno = $("#deptno").val();
         var office_city = $("#ofno").val();
         var empemail=$("#empemail").val();
+
+        
+        if (validphonenumber(contactno) && validemail(empemail)){
+    
+
         $.ajax({
             type: "POST",
             url: "/graphql/",
@@ -237,6 +269,7 @@ $(document).ready(function () {
                 location.reload();
             }
         });
+    }
 
     });
 
