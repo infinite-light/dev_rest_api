@@ -13,7 +13,7 @@ class Office(models.Model):
 class Employee(models.Model):
     firstname=models.CharField(max_length=20)
     lastname=models.CharField(max_length=20)
-    contactno=models.CharField(max_length=20)
+    contactno=models.CharField(max_length=10)
     deptno=models.ForeignKey(Department, default=1, on_delete=models.CASCADE)
     office_city=models.ForeignKey(Office, default=1, on_delete=models.CASCADE)
     empemail=models.EmailField(max_length=30, default="example@gmail.com")

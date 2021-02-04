@@ -13,7 +13,14 @@ query
   }
   
 }
-
+====
+query{
+  employeeofcontactno(contactno:"7348910642"){
+    firstname,
+    contactno,
+    empemail
+  }
+}
 ==
 query
 {

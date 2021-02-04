@@ -30,10 +30,10 @@ class employee2Type(DjangoObjectType):
 class Query(graphene.ObjectType):
     all_employee = graphene.List(employeeType)
     employee = graphene.Field(employeeType, id=graphene.Int() )
-    #all_employee = graphene.Field(employee2Type, id=graphene.Int())
-    all_office = graphene.List(officeType, id=graphene.Int())
+    employeeofcontactno= graphene.Field(employeeType, contactno=graphene.String())
+    all_office = graphene.List(officeType)
     office=graphene.Field(officeType, id=graphene.ID())
-    all_department = graphene.List(departmentType, id=graphene.Int())
+    all_department = graphene.List(departmentType)
     department=graphene.Field(departmentType, id=graphene.ID())
     
     def resolve_all_employee(root,info):
@@ -43,13 +43,16 @@ class Query(graphene.ObjectType):
         #print(info.context.META['HTTP_X_VERSION_NUMBER'])
         return Employee.objects.get(pk=id)
 
+    def resolve_employeeofcontactno(root,info,contactno):
+        return Employee.objects.get(contactno=contactno)
+
     def resolve_all_office(root,info):
         return Office.objects.all()
         
     def resolve_office(root, info, id):
         return Office.objects.filter(id=id)
 
-    def resolve_all_department(root, info, id):
+    def resolve_all_department(root, info):
         return Department.objects.all()
     
     def resolve_department(root, info, id):
@@ -79,7 +82,7 @@ class UpdateDepartment(graphene.Mutation):
   department = graphene.Field(departmentType)
 
   def mutate(self, info, id, deptname):
-    department = department.objects.get(pk=id)
+    department = Department.objects.get(pk=id)
     department.deptname = deptname if deptname is not None else department.deptname
     department.save()
     # Notice we return an instance of this mutation 🤷‍♀️
@@ -112,7 +115,7 @@ class CreateOffice(graphene.Mutation):
   office = graphene.Field(officeType)
 
   def mutate(self, info, office_city):
-    office = office.objects.create(office_city = office_city  )
+    office = Office.objects.create(office_city = office_city  )
     # We've done this so many times, it no longer feels weird 😃 
     return CreateOffice( office=office )
 
@@ -127,7 +130,7 @@ class UpdateOffice(graphene.Mutation):
   office = graphene.Field(officeType)
 
   def mutate(self, info, id, office_city):
-    office = office.objects.get(pk=id)
+    office = Office.objects.get(pk=id)
     office.office_city = office_city if office_city is not None else office.office_city
     office.save()
     # Notice we return an instance of this mutation 🤷‍♀️
@@ -143,7 +146,7 @@ class DeleteOffice(graphene.Mutation):
   office = graphene.Field(officeType)
 
   def mutate(self, info, id):
-    office = office.objects.get(pk=id)
+    office = Office.objects.get(pk=id)
     if office is not None:
       # Notice we don't do department.delete()? Thats because we must not 😓
       office.delete()
@@ -160,7 +163,7 @@ class CreateEmployee(graphene.Mutation):
     deptno_id=graphene.Int()
     office_city_id = graphene.Int()
     empemail=graphene.String()
-    
+
   employee = graphene.Field(employeeType)
 
   def mutate(self, info, firstname, lastname, contactno, deptno_id, office_city_id, empemail):
@@ -190,8 +193,9 @@ class UpdateEmployee(graphene.Mutation):
 
   # The class attributes define the response of the mutation
   employee = graphene.Field(employeeType)
-
+  
   def mutate(self, info, id, firstname, lastname, contactno, deptno_id, office_city_id, empemail):
+      
     employee = Employee.objects.get(pk=id)
     employee.firstname = firstname if firstname is not None else employee.firstname
     employee.lastname = lastname if lastname is not None else employee.lastname
@@ -226,7 +230,7 @@ class Mutation(graphene.ObjectType):
   Delete_employee = DeleteEmployee.Field()
 
   Create_department = CreateDepartment.Field()
-  Dpdate_department = UpdateDepartment.Field()
+  Update_department = UpdateDepartment.Field()
   Delete_department = DeleteDepartment.Field()
 
   Create_office = CreateOffice.Field()
