@@ -68,6 +68,7 @@ class CreateDepartment(graphene.Mutation):
 
   def mutate(self, info, deptname):
     department = Department.objects.create( deptname = deptname  )
+    department.save()
     # We've done this so many times, it no longer feels weird 😃 
     return CreateDepartment( department=department )
 

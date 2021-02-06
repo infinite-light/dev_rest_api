@@ -7,7 +7,8 @@ $(document).ready(function () {
     $('#sadd').hide();
     $('#delete').hide();
     $('#gpqldtl').hide();
-    $("div").click(function () {
+
+    $("#mydiv").click(function () {
         $.ajax({
             type: "POST",
             url: "/graphql/",
