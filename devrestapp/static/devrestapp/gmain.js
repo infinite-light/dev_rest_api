@@ -63,10 +63,10 @@ $(document).ready(function () {
                             employee(id: ${eid}) {
                             firstname
                             lastname
-                            contactno
+                            phoneNumber
                             deptno { deptname }
                             officeCity { officeCity }
-                            empemail
+                            emailAddress
                         }
                     }`
             }),
@@ -74,10 +74,10 @@ $(document).ready(function () {
                 var content = result['data']
                 var firstName = result['data']['employee']['firstname']
                 var lastname = result['data']['employee']['lastname']
-                var contactno = result['data']['employee']['contactno']
+                var contactno = result['data']['employee']['phoneNumber']
                 var deptname = result['data']['employee']['deptno']['deptname']
                 var officeCity = result['data']['employee']['officeCity']['officeCity']
-                var empemail = result['data']['employee']['empemail']
+                var empemail = result['data']['employee']['emailAddress']
 
                 var Details = "Name: " + firstName + " " + lastname + "\nContct no: " + contactno + " email : " + empemail + "\nDepartment: " + deptname + "\nOffice: " + officeCity
 
@@ -158,9 +158,9 @@ $(document).ready(function () {
     };
 
     $("#emodify").click(function () {
-        depSelect();
-        officeSelect();
+        
         var eid = $("input[name='eid']:checked").val()
+        
         $.ajax({
             type: "POST",
             url: "/graphql/",
@@ -174,22 +174,23 @@ $(document).ready(function () {
                             employee(id: ${eid}) {
                             firstname
                             lastname
-                            contactno
+                            phoneNumber
                             deptno { id }
                             officeCity { id }
-                            empemail
+                            emailAddress
                         }
                     }`
             }),
             success: function (result) {
+                
                 var content = result['data']
                 var firstName = result['data']['employee']['firstname']
                 var lastname = result['data']['employee']['lastname']
-                var contactno = result['data']['employee']['contactno']
+                var contactno = result['data']['employee']['phoneNumber']
                 //var deptname = result['data']['employee']['deptno']["id"]
                 var deptno = result['data']['employee']['deptno']["id"]
                 var officeCity = result['data']['employee']['officeCity']["id"]
-                var empemail = result['data']['employee']['empemail']
+                var empemail = result['data']['employee']['emailAddress']
 
                 $("p").html(
                     "<input type='text' id='eno' name='eno'>" +
@@ -200,7 +201,8 @@ $(document).ready(function () {
 
                     "<label for='empemail'>Email:</label> <input type='text' id='empemail' name='empemail'><br>"
                 );
-
+                depSelect();
+                officeSelect();
                 $("#eno").val(eid);
                 $("#eno").show();
                 $("#firstname").val(firstName);
@@ -286,25 +288,21 @@ $(document).ready(function () {
         var empemail = $("#empemail").val();
 
         if (validphonenumber(contactno) && validemail(empemail)) {
-            if (emp_exist(e_id, contactno, empemail) == true) {
-                $.ajax({
-                    type: "POST",
-                    url: "/graphql/",
-                    contentType: "application/graphql",
-                    headers: { 'x-version-number': '1.3' },
-                    crossDomain: true,
-                    // data: `mutation{UpdateEmployee(id:\"${e_id}\",firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
-                    data: `mutation{UpdateEmployee(id:\"${e_id}\", firstname:\"${firstname}\", lastname:\"${lastname}\", contactno:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, empemail:\"${empemail}\") {employee{id}}}`,
-                    success: function (result) {
-                        //   console.log(result)
-                        alert("Record is Updateded.");
-                        location.reload();
-                    }
-                });
-            }
-            else {
-                alert("employee with same contact no and email address already exist.")
-            }
+
+            $.ajax({
+                type: "POST",
+                url: "/graphql/",
+                contentType: "application/graphql",
+                headers: { 'x-version-number': '1.2' },
+                crossDomain: true,
+                // data: `mutation{UpdateEmployee(id:\"${e_id}\",firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
+                //data: `mutation{UpdateEmployee(id:\"${e_id}\", firstname:\"${firstname}\", lastname:\"${lastname}\", phoneNumber:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, emailAddress:\"${empemail}\") {employee{id}}}`,
+                data: `mutation{UpdateEmployee(id:\"${e_id}\", firstname:\"${firstname}\", lastname:\"${lastname}\", phoneNumber:\"${contactno}\", emailAddress:\"${empemail}\", deptnoId:${deptno}, officeCityId:${office_city}){OK employee{id}}}`,
+                success: function (result) {
+                    alert(result['data']['UpdateEmployee']['OK']);
+                    location.reload();
+                }
+            });
 
         }
 
@@ -365,28 +363,25 @@ $(document).ready(function () {
         var deptno = $("#dept").val();
         var office_city = $("#office").val();
         var empemail = $("#empemail").val();
-        var e_id="New";
+        var e_id = "New";
 
         if (validphonenumber(contactno) && validemail(empemail)) {
-            if (emp_exist(e_id, contactno, empemail) == true) {
 
-                $.ajax({
-                    type: "POST",
-                    url: "/graphql/",
-                    contentType: "application/graphql",
-                    headers: { 'x-version-number': '1.3' },
-                    crossDomain: true,
-                    data: `mutation{CreateEmployee(firstname:\"${firstname}\", lastname:\"${lastname}\", contactno:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, empemail:\"${empemail}\") {employee{id}}}`,
-                    // data: `mutation{CreateEmployee(firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
-                    success: function (result) {
-                        alert("Record is added.");
-                        location.reload();
-                    }
-                });
-            }
-            else {
-                alert("employee with same contact no and email address already exist.")
-            }
+            $.ajax({
+                type: "POST",
+                url: "/graphql/",
+                contentType: "application/graphql",
+                headers: { 'x-version-number': '1.3' },
+                crossDomain: true,
+                data: `mutation{CreateEmployee(firstname:\"${firstname}\", lastname:\"${lastname}\", phoneNumber:\"${contactno}\", emailAddress:\"${empemail}\", deptnoId:${deptno}, officeCityId:${office_city}){OK employee{id}}}`,
+                //data: `mutation{CreateEmployee(firstname:\"${firstname}\", lastname:\"${lastname}\", contactno:\"${contactno}\", deptnoId:${deptno}, officeCityId:${office_city}, empemail:\"${empemail}\") {employee{id}}}`,
+                // data: `mutation{CreateEmployee(firstname: \"${firstname}\",lastname: \"${lastname}\",contactno: \"${contactno}\") {employee{id}}}`,
+                success: function (result) {
+                    alert(result['data']['CreateEmployee']['OK']);
+                    location.reload();
+                }
+            });
+
         }
     });
 

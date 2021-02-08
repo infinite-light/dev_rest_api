@@ -60,20 +60,22 @@ mutation{
 
 ---
 mutation {
-  UpdateEmployee(id: 18, firstname: "Dev", lastname: "d", contactno: "1") {
+  UpdateEmployee(id: 3, firstname: "Parul", lastname: "Patel", phoneNumber: "7341113333", emailAddress: "example1@gmail.com", deptnoId: 2, officeCityId: 2) {
+    OK
     employee {
-      firstname,
-      lastname,
-      contactno,
+      firstname
+      lastname
+      emailAddress
       deptno {
         id
-      },
+      }
       officeCity {
         id
       }
     }
   }
 }
+
 ---
 mutation{
   DeleteEmployee(id:17)
