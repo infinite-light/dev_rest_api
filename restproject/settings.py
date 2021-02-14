@@ -26,7 +26,7 @@ SECRET_KEY = 'a^can-1mgp7uc4)(ckxg0y3e0ji0ciu0(!10y+vg0@3d1_k13p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-env.eba-cctkic6n.us-west-2.elasticbeanstalk.com"]
 
 CSRF_USE_SESSIONS = True
 
