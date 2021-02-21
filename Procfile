@@ -1,3 +1,3 @@
 release: python manage.py migrate
-web: gunicorn restproject.wsgi
+web: gunicorn dev_rest_api.Procfile
 
