@@ -144,3 +144,8 @@ GRAPHENE = {
 }
 django_heroku.settings(locals())
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # for staticfiles in heroku
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+
+os.makedirs(STATIC_TMP, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
